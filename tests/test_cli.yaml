@@ -1,0 +1,11 @@
+# Ensure that the output of the count.py --version option is in the correct
+# semantic versioning format, eg 1.0.2
+- name: version option
+  tags:
+    - cli_options
+  command:
+    ./count.py --version
+  exit_code: 0
+  stdout:
+    contains_regex:
+      - 'count.py ([\d+]\.){2}\d+'

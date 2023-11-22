@@ -1,0 +1,5 @@
+# These are only required for the dev image:
+pytest==7.4
+pytest-workflow==2.0
+flake8==6.1
+click==8.1

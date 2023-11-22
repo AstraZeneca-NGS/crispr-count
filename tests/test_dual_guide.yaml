@@ -1,0 +1,45 @@
+# Ensure that a count file is generated successfully and as expected with a dual
+# guide sequence file and dual guide library reference file.
+- name: dual guide
+  tags:
+    - dual_guide
+  command:
+    ./count.py --processes 4 --dual_guide --lib test-data/test-dual-guide-count/test-dual-guide-annot-library--cleanr.tsv --input test-data/test-dual-guide-count/test-dual-revcomp.tsv --out test-output/dual_guide.count
+  files:
+    - path: test-output/dual_guide.count
+      md5sum: ac97f37c630748f14184b2dea5d9288b
+
+# Implicit original test from AZ—they supplied the data in their repo, but no
+# actual execution instructions nor any expected output.
+- name: OG AZ test
+  tags:
+    - dual_guide
+  command:
+    ./count.py --processes 4 --dual_guide --lib test-data/dual_guide_library.tsv --input test-data/dual_guide_input.txt --out test-output/python.count
+  files:
+    - path: test-output/python.count
+    # md5sum: 🔮 ←TODO: no MD5 checksum yet, because we don't know what to expect!
+
+# The below two tests ("dual guide swapped" and "dual guide same position") are
+# exploratory scenario tests from Alex, and the results have been validated with
+# Alex and Marica.
+- name: dual guide swapped
+  tags:
+    - dual_guide
+  command:
+    ./count.py --processes 4 --dual_guide --lib test-data/test-dual-guide-count/test-dual-guide-annot-library--cleanr.tsv --input test-data/test-dual-guide-count/test-dual-guide-swapped-positions.tsv --out test-output/dual_guide_swapped.count
+  files:
+    - path: test-output/dual_guide_swapped.count
+      md5sum: 5603e501c88f7d90a3bbc0227aeffdf7
+
+# Alex says: for dual guide screens the assumption is that the second guide is
+# always in the second read. Hence, we wouldn't be able to handle single-read
+# dual-guide screen.
+- name: dual guide same position
+  tags:
+    - dual_guide
+  command:
+    ./count.py --processes 4 --dual_guide --lib test-data/test-dual-guide-count/test-dual-guide-annot-library--cleanr.tsv --input test-data/test-dual-guide-count/test-dual-same-position.tsv --out test-output/dual_guide_same.count
+  files:
+    - path: test-output/dual_guide_same.count
+      md5sum: 5603e501c88f7d90a3bbc0227aeffdf7

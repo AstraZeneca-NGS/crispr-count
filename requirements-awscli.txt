@@ -1,0 +1,2 @@
+# this is required in the production image but not in the local environmnet
+awscli==1.29.20

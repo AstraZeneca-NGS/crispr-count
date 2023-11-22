@@ -1,0 +1,35 @@
+# Ensure that a count file is generated successfully and as expected with a
+# single guide sequence file and single guide library reference file.
+- name: single guide
+  tags:
+    - single_guide
+  command:
+    # The library in this test corresponds to its equivalent used by the C
+    # program after passing through library_reorder.py to reorder and rename the
+    # columns.
+    sh -c 'gzip --decompress --to-stdout test-data/test-single-guide-count/SLX-19443.i701_i503.HK3H3BBXY.s_6.r_1.sample.fq.gz | awk "NR%4==2" | ./count.py --processes 2 --lib test-data/test-single-guide-count/test-lib-plasmid-nf-core-2.tsv --input - --out test-output/single_guide.count'
+  files:
+    - path: "./test-output/single_guide.count"
+      md5sum: d35671f8d115b256abf9d7d15225729a
+
+# This is an edge case test scenario to ensure that a counts file is generated
+# successfully with a dual guide reference library and a single guide sequence
+# file.
+- name: single guide edge case
+  tags:
+    - single_guide
+  command:
+    ./count.py --processes 4 --lib test-data/test-dual-guide-count/test-dual-guide-annot-library--cleanr.tsv --input test-data/test-single-guide-count/test-single-revcomp.tsv --out test-output/single_revcomp.count
+  files:
+    - path: test-output/single_revcomp.count
+      md5sum: e52ee0d2b51b403f7c56ef3991b61581
+
+- name: compare python and shell outputs
+  tags:
+    - single_guide
+    - testing
+  command:
+    bash -c './count.py --processes 4 --lib test-data/test-compare-c-python/libraries/az-cruk-count--c-python-test-cleanr-lib.tsv --input <(gzip -dc test-data/test-compare-c-python/sequences/SLX-20830.i718_i502.HTN5LDRXY.s_2.r_1--c-py-diff-test.fq.gz) --out test-output/python_shell.count'
+  files:
+    - path: test-output/python_shell.count
+      md5sum: 88f4c8810d8535da27764daa4d458dd5
